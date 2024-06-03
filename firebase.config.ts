@@ -3,12 +3,12 @@ import { getFirestore } from '@firebase/firestore';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: 'AIzaSyCY0q7Vi2DilfchzORuridC7FQgr0INJeA',
-  authDomain: 'crypto-guru-ed9c7.firebaseapp.com',
-  projectId: 'crypto-guru-ed9c7',
-  storageBucket: 'crypto-guru-ed9c7.appspot.com',
-  messagingSenderId: '943943580469',
-  appId: '1:943943580469:web:2473399219db48c1f26a7c',
+  apiKey: 'AIzaSyBQTV7Efv9d_EECXxJQcc-T_lvy9Jam6HI',
+  authDomain: 'ucu-dating-app.firebaseapp.com',
+  projectId: 'ucu-dating-app',
+  storageBucket: 'ucu-dating-app.appspot.com',
+  messagingSenderId: '575711991875',
+  appId: '1:575711991875:web:16a0571f2ce24285badcf6'
 };
 
 // Initialize Firebase
