@@ -24,6 +24,8 @@ const AuthPage = () => {
   const loading = signInLoading || signUpLoading;
 
   const [showSignIn, setShowSignIn] = useState(false);
+
+  // Variables that store form field values.
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -64,7 +66,11 @@ const AuthPage = () => {
 
       // Save user to database.
       const userDocRef = doc(db, 'users', res.user.uid);
-      await setDoc(userDocRef, { email });
+
+      await setDoc(userDocRef, {
+        email,
+        // TODO Add additional fields
+      });
 
       toast({ status: 'success', description: 'Successfully signed up!' });
     } catch (e) {
@@ -98,6 +104,7 @@ const AuthPage = () => {
         <Box mx="auto" as="form" onSubmit={handleAuth}>
           <Stack spacing={4} w={500} bg="white" rounded="md" p={8}>
             <Text fontSize="2xl">{showSignIn ? 'Sign in' : 'Sign up'}</Text>
+
             <Input placeholder="Email" type="email" onChange={handleEmailChange} value={email} required />
             <Input
               placeholder="Password"
@@ -107,6 +114,8 @@ const AuthPage = () => {
               minLength={6}
               required
             />
+            {/* TODO Add additional input fields (name, age, gender, preference, comment, country of living, contact info) */}
+
             <Button type="submit" colorScheme="blue" isDisabled={loading} isLoading={loading}>
               Submit
             </Button>
