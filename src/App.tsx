@@ -27,6 +27,8 @@ const EventPage = () => {
         </Link>
         <Text color="white">UCU x Fluxon Product Development Bootcamp</Text>
         <HStack mt={4} color="blue.100">
+          <Link href="/dashboard">Go to main page</Link>
+          <Text>|</Text>
           <Link href="/firebase-demo">Firebase demo</Link>
           <Text>|</Text>
           <Link href="/auth">Authenticate</Link>
