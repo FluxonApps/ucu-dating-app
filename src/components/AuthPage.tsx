@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Input, Stack, Text, useToast } from '@chakra-ui/react';
+import { Box, Button, Flex, Input, Stack, Select, useToast } from '@chakra-ui/react';
 import { getAuth } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
 import { ChangeEvent, FormEvent, useState } from 'react';
@@ -29,15 +29,13 @@ const AuthPage = () => {
   // Variables that store form field values.
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [name, setName]=useState('');
-  const [age, setAge]=useState('');
-  const [gender, setGender]=useState('');
-  const [countryOfLiving, setCountry]=useState('');
-  const [contactInfo, setContact]=useState('');
-  const [preference, setPreference]=useState('');
-  const [comment, setComment]=useState('');
-
-
+  const [name, setName] = useState('');
+  const [age, setAge] = useState('');
+  const [gender, setGender] = useState('');
+  const [countryOfLiving, setCountry] = useState('');
+  const [contactInfo, setContact] = useState('');
+  const [preference, setPreference] = useState('');
+  const [comment, setComment] = useState('');
 
   const switchAuthMode = () => {
     setShowSignIn((prevState) => !prevState);
@@ -60,33 +58,33 @@ const AuthPage = () => {
     setPassword(e.target.value);
   };
 
-  const handleNameChange=(e: ChangeEvent<HTMLInputElement>) => {
+  const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
   };
 
-  const handleAgeChange=(e: ChangeEvent<HTMLInputElement>) => {
+  const handleAgeChange = (e: ChangeEvent<HTMLInputElement>) => {
     setAge(e.target.value);
   };
 
-  const handleGenderChange=(e: ChangeEvent<HTMLInputElement>) => {
+  const handleGenderChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setGender(e.target.value);
   };
 
-  const handleCountryChange=(e: ChangeEvent<HTMLInputElement>) => {
+  const handleCountryChange = (e: ChangeEvent<HTMLInputElement>) => {
     setCountry(e.target.value);
   };
-  const handleContactChange=(e: ChangeEvent<HTMLInputElement>) => {
+
+  const handleContactChange = (e: ChangeEvent<HTMLInputElement>) => {
     setContact(e.target.value);
   };
-  const handlePreferenceChange=(e: ChangeEvent<HTMLInputElement>) => {
+
+  const handlePreferenceChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setPreference(e.target.value);
   };
-  const handleCommentChange=(e: ChangeEvent<HTMLInputElement>) => {
+
+  const handleCommentChange = (e: ChangeEvent<HTMLInputElement>) => {
     setComment(e.target.value);
   };
-
-
-
 
   const signIn = async () => {
     try {
@@ -105,23 +103,29 @@ const AuthPage = () => {
   };
 
   const signUp = async () => {
+    
     try {
+      // Перевірка віку
+      if (parseInt(age) < 16) {
+        throw new Error('Users must be at least 16 years old.');
+      }
       const res = await createUserWithEmailAndPassword(email, password);
       if (!res) throw new Error();
+
+      
 
       // Save user to database.
       const userDocRef = doc(db, 'users', res.user.uid);
 
       await setDoc(userDocRef, {
         name,
-        email, 
-        age, 
-        gender, 
+        email,
+        age,
+        gender,
         countryOfLiving,
-        contactInfo, 
+        contactInfo,
         preference,
         comment
-        // TODO Add additional fields
       });
 
       toast({ status: 'success', description: 'Successfully signed up!' });
@@ -130,7 +134,7 @@ const AuthPage = () => {
       toast({
         status: 'error',
         title: 'Error',
-        description: 'Failed to create a new user. Please, try again.',
+        description: e.message || 'Failed to create a new user. Please, try again.',
       });
     }
   };
@@ -152,48 +156,56 @@ const AuthPage = () => {
 
   return (
     <Flex w="full" h="full" alignItems="center" justifyContent="space-between">
-        <Box mx="auto" as="form" onSubmit={handleAuth}>
-          <Stack spacing={4} w={500} bg="white" rounded="md" p={8}>
-            <img className = "logo" src='src/logo.png' ></img>
-            
-            {!showSignIn && (<Input placeholder="Name" type="name" onChange={handleNameChange} value={name} required />)}
-            <Input placeholder="Email" type="email" onChange={handleEmailChange} value={email} required />
-            <Input
-              placeholder="Password"
-              type="password"
-              onChange={handlePasswordChange}
-              value={password}
-              minLength={6}
-              required
-            />
+      <Box mx="auto" as="form" onSubmit={handleAuth}>
+        <Stack spacing={4} w={500} bg="white" rounded="md" p={8}>
+          <img className="logo" src='src/logo.png' alt="Logo" />
 
+          {!showSignIn && (<Input placeholder="Name" type="text" onChange={handleNameChange} value={name} required />)}
+          <Input placeholder="Email" type="email" onChange={handleEmailChange} value={email} required />
+          <Input
+            placeholder="Password"
+            type="password"
+            onChange={handlePasswordChange}
+            value={password}
+            minLength={6}
+            required
+          />
 
-            {!showSignIn && (<Input placeholder="Age" type="age" onChange={handleAgeChange} value={age} required />)}
-            {!showSignIn && (<Input placeholder="Gender" type="gender" onChange={handleGenderChange} value={gender} required />)}
-            {!showSignIn && (<Input placeholder="Country of living" type="countryOfLiving" onChange={handleCountryChange} value={countryOfLiving} required />)}
-            {!showSignIn && (<Input placeholder="Contact Information" type="contactInfo" onChange={handleContactChange} value={contactInfo} required />)}
-            {!showSignIn && (<Input placeholder="Preference" type="preference" onChange={handlePreferenceChange} value={preference} required />)}
-            {!showSignIn && (<Input placeholder="Comment" type="comment" onChange={handleCommentChange} value={comment} required />)}
-            
-            {/* TODO Add additional input fields (name, age, gender, preference, comment, country of living, contact info) */}
+          {!showSignIn && (
+            <>
+              <Input placeholder="Age" type="number" onChange={handleAgeChange} value={age} required />
+              <Select placeholder="Gender" onChange={handleGenderChange} value={gender} required>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="non-binary">Non-binary</option>
+              </Select>
+              <Input placeholder="Country of living" type="text" onChange={handleCountryChange} value={countryOfLiving} required />
+              <Input placeholder="Contact Information" type="text" onChange={handleContactChange} value={contactInfo} required />
+              <Select placeholder="Preference" onChange={handlePreferenceChange} value={preference} required>
+                <option value="friends">Friends</option>
+                <option value="date">Date</option>
+                <option value="dont-know">Don't know</option>
+              </Select>
+              <Input placeholder="Comment" type="text" onChange={handleCommentChange} value={comment} required />
+            </>
+          )}
 
-            <Button type="submit" bg="turquoise" isDisabled={loading} isLoading={loading}>
-              SIGN UP
-            </Button>
-            <Button
-              mt={4}
-              fontSize="sm"
-              fontWeight="normal"
-              variant="link"
-              onClick={switchAuthMode}
-              isDisabled={loading}
-            >
-              {showSignIn ? 'Create a new account?' : 'Already have an account?'}
-              
-            </Button>
-          </Stack>
-        </Box>
-      </Flex>
+          <Button type="submit" bg="turquoise" isDisabled={loading} isLoading={loading}>
+            {showSignIn ? 'SIGN IN' : 'SIGN UP'}
+          </Button>
+          <Button
+            mt={4}
+            fontSize="sm"
+            fontWeight="normal"
+            variant="link"
+            onClick={switchAuthMode}
+            isDisabled={loading}
+          >
+            {showSignIn ? 'Create a new account?' : 'Already have an account?'}
+          </Button>
+        </Stack>
+      </Box>
+    </Flex>
   );
 };
 
