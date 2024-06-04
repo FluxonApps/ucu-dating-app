@@ -8,6 +8,7 @@ import {
   useSignInWithEmailAndPassword,
 } from 'react-firebase-hooks/auth';
 import { Navigate } from 'react-router-dom';
+import '../auth.css';
 
 import { db } from '../../firebase.config.ts';
 
@@ -150,11 +151,11 @@ const AuthPage = () => {
   }
 
   return (
-    <MainLayout>
-      <Flex w="full" h="full" alignItems="center" justifyContent="space-between">
+    <Flex w="full" h="full" alignItems="center" justifyContent="space-between">
         <Box mx="auto" as="form" onSubmit={handleAuth}>
           <Stack spacing={4} w={500} bg="white" rounded="md" p={8}>
-            <Text fontSize="2xl">{showSignIn ? 'Sign in' : 'Sign up'}</Text>
+            <img className = "logo" src='src/logo.png' ></img>
+            
             {!showSignIn && (<Input placeholder="Name" type="name" onChange={handleNameChange} value={name} required />)}
             <Input placeholder="Email" type="email" onChange={handleEmailChange} value={email} required />
             <Input
@@ -165,6 +166,8 @@ const AuthPage = () => {
               minLength={6}
               required
             />
+
+
             {!showSignIn && (<Input placeholder="Age" type="age" onChange={handleAgeChange} value={age} required />)}
             {!showSignIn && (<Input placeholder="Gender" type="gender" onChange={handleGenderChange} value={gender} required />)}
             {!showSignIn && (<Input placeholder="Country of living" type="countryOfLiving" onChange={handleCountryChange} value={countryOfLiving} required />)}
@@ -191,7 +194,6 @@ const AuthPage = () => {
           </Stack>
         </Box>
       </Flex>
-    </MainLayout>
   );
 };
 
