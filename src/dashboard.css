@@ -1,0 +1,32 @@
+.my-button {
+    gap: 10px;
+    display: block;
+    margin: auto;
+    top: 546px;
+    left: 11px;
+    width: 45%;
+    height: 15%;
+    padding: 10px;
+    align-items: center;
+    flex-shrink: 0;
+    border-color: rgba(0, 0, 0, 1);
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 100px;
+    flex-direction: column;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 1);
+}
+.card {
+    display: flex;
+    overflow: auto;
+    align-items: center;
+    flex-direction: column;
+  }
+.connectly-logo {
+    top: 0px;
+    left: 0px;
+    width: 10%;
+    height: 10%;
+    position: 'top';
+  }

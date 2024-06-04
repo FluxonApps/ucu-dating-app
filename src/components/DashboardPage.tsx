@@ -1,10 +1,11 @@
-import { Box, Button, Card, Spinner } from '@chakra-ui/react';
+import { Box, Button, Card, Center, Spinner } from '@chakra-ui/react';
 import { getAuth } from 'firebase/auth';
 import { collection, doc, documentId, query, where } from 'firebase/firestore';
 import { useState } from 'react';
 import { useAuthState, useSignOut } from 'react-firebase-hooks/auth';
 import { useCollection, useDocument } from 'react-firebase-hooks/firestore';
 import { Navigate } from 'react-router-dom';
+import '../dashboard.css';
 
 import { db } from '../../firebase.config';
 
@@ -40,7 +41,11 @@ function DashboardPage() {
 
   return (
     <Box padding="24px">
-      <p>Welcome, {currentUser?.data()?.name}!</p>
+      {/* <p>Welcome, {currentUser?.data()?.name}!</p> */}
+      <img
+      src="../src/logo.png"
+      className='connectly-logo'
+          />
       <br />
       <div style={{ display: 'flex', gap: '24px' }}>
         {/* Display cards for each user with their data. */}
@@ -49,7 +54,7 @@ function DashboardPage() {
           const userData = user.data();
 
           return (
-            <Card key={user.id} padding={4}>
+            <Card key={user.id} padding={4} className='card'>
               <p>
                 <b>Name: </b> {userData.name}
               </p>
@@ -71,13 +76,14 @@ function DashboardPage() {
               </p> :''}
               <Button onClick={function () {
                 likeUser(user.id);
-              }}>Like</Button>
+              }} className='my-button'>❤️</Button>
               
             </Card>
           );
 
         })}
       </div>
+      
       <br />
       <Button onClick={signOut}>Sign out</Button>
     </Box>
