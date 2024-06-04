@@ -1,13 +1,13 @@
 import { Box, Button, Card, Center, Spinner } from '@chakra-ui/react';
 import { getAuth } from 'firebase/auth';
-import { collection, doc, documentId, query, where } from 'firebase/firestore';
-import { useState } from 'react';
+import { arrayUnion, collection, doc, documentId, query, updateDoc, where } from 'firebase/firestore';
 import { useAuthState, useSignOut } from 'react-firebase-hooks/auth';
 import { useCollection, useDocument } from 'react-firebase-hooks/firestore';
 import { Navigate } from 'react-router-dom';
-import '../dashboard.css';
 
+import '../dashboard.css';
 import { db } from '../../firebase.config';
+import logo from '../logo.png';
 
 const auth = getAuth();
 
@@ -17,16 +17,28 @@ function DashboardPage() {
 
   // Get the current user from Firebase
   const [currentUser, currentUserLoading] = useDocument(doc(db, 'users', user?.uid || 'asd'));
-  // A list of IDs of liked users.
-  const [likedUsers, setLikedUsers] = useState<string[]>([]);
+  const currentUserData = currentUser?.data() || {};
 
   // Get users from Firebase database
   const usersCollectionRef = collection(db, 'users');
   const [users, usersLoading] = useCollection(query(usersCollectionRef, where(documentId(), '!=', user?.uid || 'asd')));
+  const usersArray = (users?.docs || []).map(function (user) {
+    return { id: user.id, ...user.data() };
+  });
 
-  function likeUser(userId: string) {
-    console.log(userId);
-    setLikedUsers([...likedUsers, userId]);
+  async function likeUser(userId: string) {
+    if (currentUser) {
+      await updateDoc(currentUser.ref, {
+        userLikes: arrayUnion(userId),
+      });
+    }
+  }
+
+  function checkIfMatch(userId: string, userLikes: string[]) {
+    if (!userLikes.length || !currentUser) return false;
+
+    // It's a match if the logged in user and the user we check against have liked each other.
+    return currentUserData.userLikes?.includes(userId) && userLikes.includes(currentUser.id);
   }
 
   // Do not show page content until auth state is fetched.
@@ -42,48 +54,48 @@ function DashboardPage() {
   return (
     <Box padding="24px">
       {/* <p>Welcome, {currentUser?.data()?.name}!</p> */}
-      <img
-      src="../src/logo.png"
-      className='connectly-logo'
-          />
+      <img src={logo} className="connectly-logo" />
       <br />
       <div style={{ display: 'flex', gap: '24px' }}>
         {/* Display cards for each user with their data. */}
-        {users?.docs.map(function (user) {
-          // An object that holds user data from Firebase.
-          const userData = user.data();
-
+        {usersArray.map(function (user: any) {
           return (
-            <Card key={user.id} padding={4} className='card'>
+            <Card key={user.id} padding={4} className="card">
               <p>
-                <b>Name: </b> {userData.name}
+                <b>Name: </b> {user.name}
               </p>
               <p>
-                <b>Age: </b> {userData.age}
+                <b>Age: </b> {user.age}
               </p>
               <p>
-                <b>Country of living: </b> {userData.country}
+                <b>Country of living: </b> {user.country}
               </p>
               <p>
-                <b>Preference: </b> {userData.preference}
+                <b>Preference: </b> {user.preference}
               </p>
               <p>
-                <b>Comment: </b> {userData.comment}
+                <b>Comment: </b> {user.comment}
               </p>
-              {likedUsers.includes(user.id) ?
-              <p>
-                <b>Contact info: </b> {userData.contactInfo}
-              </p> :''}
-              <Button onClick={function () {
-                likeUser(user.id);
-              }} className='my-button'>❤️</Button>
-              
+              {checkIfMatch(user.id, user.userLikes || []) ? (
+                <p>
+                  <b>Contact info: </b> {user.contactInfo}
+                </p>
+              ) : (
+                ''
+              )}
+              <Button
+                onClick={function () {
+                  likeUser(user.id);
+                }}
+                className="my-button"
+              >
+                ❤️
+              </Button>
             </Card>
           );
-
         })}
       </div>
-      
+
       <br />
       <Button onClick={signOut}>Sign out</Button>
     </Box>

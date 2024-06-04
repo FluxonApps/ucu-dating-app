@@ -8,6 +8,8 @@ import {
   useSignInWithEmailAndPassword,
 } from 'react-firebase-hooks/auth';
 import { Navigate } from 'react-router-dom';
+
+import logo from '../logo.png';
 import '../auth.css';
 
 import { db } from '../../firebase.config.ts';
@@ -103,16 +105,14 @@ const AuthPage = () => {
   };
 
   const signUp = async () => {
-    
     try {
       // Перевірка віку
       if (parseInt(age) < 16) {
         throw new Error('Users must be at least 16 years old.');
       }
+
       const res = await createUserWithEmailAndPassword(email, password);
       if (!res) throw new Error();
-
-      
 
       // Save user to database.
       const userDocRef = doc(db, 'users', res.user.uid);
@@ -125,7 +125,8 @@ const AuthPage = () => {
         countryOfLiving,
         contactInfo,
         preference,
-        comment
+        comment,
+        userLikes: [],
       });
 
       toast({ status: 'success', description: 'Successfully signed up!' });
@@ -155,12 +156,12 @@ const AuthPage = () => {
   }
 
   return (
-    <Flex w="full" h="full" alignItems="center" justifyContent="space-between">
+    <Flex w="full" h="full" justifyContent="space-between">
       <Box mx="auto" as="form" onSubmit={handleAuth}>
         <Stack spacing={4} w={500} bg="white" rounded="md" p={8}>
-          <img className="logo" src='src/logo.png' alt="Logo" />
+          <img className="auth-logo" src={logo} alt="Logo" />
 
-          {!showSignIn && (<Input placeholder="Name" type="text" onChange={handleNameChange} value={name} required />)}
+          {!showSignIn && <Input placeholder="Name" type="text" onChange={handleNameChange} value={name} required />}
           <Input placeholder="Email" type="email" onChange={handleEmailChange} value={email} required />
           <Input
             placeholder="Password"
@@ -179,8 +180,20 @@ const AuthPage = () => {
                 <option value="female">Female</option>
                 <option value="non-binary">Non-binary</option>
               </Select>
-              <Input placeholder="Country of living" type="text" onChange={handleCountryChange} value={countryOfLiving} required />
-              <Input placeholder="Contact Information" type="text" onChange={handleContactChange} value={contactInfo} required />
+              <Input
+                placeholder="Country of living"
+                type="text"
+                onChange={handleCountryChange}
+                value={countryOfLiving}
+                required
+              />
+              <Input
+                placeholder="Contact Information"
+                type="text"
+                onChange={handleContactChange}
+                value={contactInfo}
+                required
+              />
               <Select placeholder="Preference" onChange={handlePreferenceChange} value={preference} required>
                 <option value="friends">Friends</option>
                 <option value="date">Date</option>
@@ -193,14 +206,7 @@ const AuthPage = () => {
           <Button type="submit" bg="turquoise" isDisabled={loading} isLoading={loading}>
             {showSignIn ? 'SIGN IN' : 'SIGN UP'}
           </Button>
-          <Button
-            mt={4}
-            fontSize="sm"
-            fontWeight="normal"
-            variant="link"
-            onClick={switchAuthMode}
-            isDisabled={loading}
-          >
+          <Button mt={4} fontSize="sm" fontWeight="normal" variant="link" onClick={switchAuthMode} isDisabled={loading}>
             {showSignIn ? 'Create a new account?' : 'Already have an account?'}
           </Button>
         </Stack>
