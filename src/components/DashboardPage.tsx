@@ -53,13 +53,29 @@ function DashboardPage() {
               <p>
                 <b>Name: </b> {userData.name}
               </p>
-              {/* TODO Add paragraphs that show user's age, gender, country of living, preference, comment. */}
-
-              {/* TODO If user is liked, show contact info. */}
-
-              {/* TODO Create a button that calls the "likeUser" function. */}
+              <p>
+                <b>Age: </b> {userData.age}
+              </p>
+              <p>
+                <b>Country of living: </b> {userData.country}
+              </p>
+              <p>
+                <b>Preference: </b> {userData.preference}
+              </p>
+              <p>
+                <b>Comment: </b> {userData.comment}
+              </p>
+              {likedUsers.includes(user.id) ?
+              <p>
+                <b>Contact info: </b> {userData.contactInfo}
+              </p> :''}
+              <Button onClick={function () {
+                likeUser(user.id);
+              }}>Like</Button>
+              
             </Card>
           );
+
         })}
       </div>
       <br />
