@@ -9,6 +9,7 @@ import { Navigate } from 'react-router-dom';
 import '../dashboard.css';
 import { db } from '../../firebase.config';
 import logo from '../logo.png';
+import countries from '../components/countries.json'; // Import the JSON data
 
 const auth = getAuth();
 
@@ -18,6 +19,7 @@ function DashboardPage() {
   const [ageRange, setAgeRange] = useState('');
   const [genderFilter, setGenderFilter] = useState('');
   const [preferenceFilter, setPreferenceFilter] = useState('');
+  const [countryFilter, setCountryFilter] = useState('');
 
   // Get the current user from Firebase
   const [currentUser, currentUserLoading] = useDocument(doc(db, 'users', user?.uid || 'asd'));
@@ -26,9 +28,10 @@ function DashboardPage() {
   // Get users from Firebase database
   const usersCollectionRef = collection(db, 'users');
   const [users, usersLoading] = useCollection(query(usersCollectionRef, where(documentId(), '!=', user?.uid || 'asd')));
-  const usersArray = (users?.docs || []).map(function (user) {
-    return { id: user.id, ...user.data() };
-  });
+  const usersArray = (users?.docs || []).map(user => ({
+    id: user.id,
+    ...user.data()
+  }));
 
   async function likeUser(userId: string) {
     if (currentUser) {
@@ -58,6 +61,10 @@ function DashboardPage() {
     setPreferenceFilter(event.target.value);
   }
 
+  function handleCountryFilterChange(event: React.ChangeEvent<HTMLSelectElement>) {
+    setCountryFilter(event.target.value);
+  }
+
   // Filter users by selected filters
   const filteredUsersArray = usersArray.filter(user => {
     const age = user.age;
@@ -70,8 +77,9 @@ function DashboardPage() {
     );
     const genderMatch = !genderFilter || user.gender === genderFilter;
     const preferenceMatch = !preferenceFilter || user.preference === preferenceFilter;
+    const countryMatch = !countryFilter || user.countryOfLiving === countryFilter;
 
-    return ageMatch && genderMatch && preferenceMatch;
+    return ageMatch && genderMatch && preferenceMatch && countryMatch;
   });
 
   // Do not show page content until auth state is fetched.
@@ -87,7 +95,7 @@ function DashboardPage() {
   return (
     <Box padding="24px" className='body-cont'>
       <div>
-        <img src={logo} className="connectly-logo" />
+        <img src={logo} className="connectly-logo" alt="Connectly Logo" />
       </div>
       <br />
       <Select placeholder="Filter by age range" onChange={handleAgeRangeChange} value={ageRange}>
@@ -103,54 +111,41 @@ function DashboardPage() {
         <option value="non-binary">Non-binary</option>
       </Select>
       <Select placeholder="Filter by preference" onChange={handlePreferenceFilterChange} value={preferenceFilter}>
-        <option value="dont-know">Dont-know</option>
+        <option value="dont-know">Don't know</option>
         <option value="date">Date</option>
         <option value="friends">Friends</option>
         {/* Add other preference options as needed */}
+      </Select>
+      <Select placeholder="Filter by country" onChange={handleCountryFilterChange} value={countryFilter}>
+        {countries.map(country => (
+          <option key={country.value} value={country.value}>
+            {country.name}
+          </option>
+        ))}
       </Select>
       <br />
       <div className='card-container' style={{ display: 'flex', gap: '24px', flexWrap: 'wrap' }}>
         {/* Display cards for each user with their data. */}
         {filteredUsersArray.length > 0 ? (
-          filteredUsersArray.map(function (user: any) {
-            return (
-              <Card key={user.id} padding={4} className="card">
-                <p>
-                  <b>Name: </b> {user.name}
-                </p>
-                <p>
-                  <b>Gender: </b> {user.gender}
-                </p>
-                <p>
-                  <b>Age: </b> {user.age}
-                </p>
-                <p>
-                  <b>Country of living: </b> {user.countryOfLiving}
-                </p>
-                <p>
-                  <b>Preference: </b> {user.preference}
-                </p>
-                <p>
-                  <b>Comment: </b> {user.comment}
-                </p>
-                {checkIfMatch(user.id, user.userLikes || []) ? (
-                  <p>
-                    <b>Contact info: </b> {user.contactInfo}
-                  </p>
-                ) : (
-                  ''
-                )}
-                <Button
-                  onClick={function () {
-                    likeUser(user.id);
-                  }}
-                  className="my-button"
-                >
-                  ❤️
-                </Button>
-              </Card>
-            );
-          })
+          filteredUsersArray.map(user => (
+            <Card key={user.id} padding={4} className="card">
+              <p><b>Name: </b> {user.name}</p>
+              <p><b>Gender: </b> {user.gender}</p>
+              <p><b>Age: </b> {user.age}</p>
+              <p><b>Country of living: </b> {user.countryOfLiving}</p>
+              <p><b>Preference: </b> {user.preference}</p>
+              <p><b>Comment: </b> {user.comment}</p>
+              {checkIfMatch(user.id, user.userLikes || []) && (
+                <p><b>Contact info: </b> {user.contactInfo}</p>
+              )}
+              <Button
+                onClick={() => likeUser(user.id)}
+                className="my-button"
+              >
+                ❤️
+              </Button>
+            </Card>
+          ))
         ) : (
           <Center w="full" py={8}>
             <p>No users matched your filters.</p>
@@ -159,11 +154,9 @@ function DashboardPage() {
       </div>
 
       <br />
-      <Button className='' onClick={signOut}>Sign out</Button>
+      <Button onClick={signOut}>Sign out</Button>
     </Box>
-    // <Button onClick={signOut}>Sign out</Button>
   );
 }
 
 export default DashboardPage;
-

@@ -1,7 +1,15 @@
-import { Box, Button, Flex, Input, Stack, Select, useToast } from '@chakra-ui/react';
+import React, { ChangeEvent, FormEvent, useState } from 'react';
+import {
+  Box,
+  Button,
+  Flex,
+  Input,
+  Stack,
+  Select,
+  useToast,
+} from '@chakra-ui/react';
 import { getAuth } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
-import { ChangeEvent, FormEvent, useState } from 'react';
 import {
   useAuthState,
   useCreateUserWithEmailAndPassword,
@@ -11,10 +19,8 @@ import { Navigate } from 'react-router-dom';
 
 import logo from '../logo.png';
 import '../auth.css';
-
 import { db } from '../../firebase.config.ts';
-
-
+import countries from '../components/countries.json'; // Import the JSON data
 
 const auth = getAuth();
 
@@ -72,7 +78,7 @@ const AuthPage = () => {
     setGender(e.target.value);
   };
 
-  const handleCountryChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleCountryChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setCountry(e.target.value);
   };
 
@@ -106,7 +112,6 @@ const AuthPage = () => {
 
   const signUp = async () => {
     try {
-      // Перевірка віку
       if (parseInt(age) < 16) {
         throw new Error('Users must be at least 16 years old.');
       }
@@ -150,7 +155,6 @@ const AuthPage = () => {
     }
   };
 
-  // Check if user is already signed in. If yes, redirect to main app.
   if (user) {
     return <Navigate to="/dashboard" replace />;
   }
@@ -180,13 +184,13 @@ const AuthPage = () => {
                 <option value="female">Female</option>
                 <option value="non-binary">Non-binary</option>
               </Select>
-              <Input
-                placeholder="Country of living"
-                type="text"
-                onChange={handleCountryChange}
-                value={countryOfLiving}
-                required
-              />
+              <Select placeholder="Country of living" onChange={handleCountryChange} value={countryOfLiving} color={'grey'} required>
+                {countries.map((country) => (
+                  <option key={country.value} value={country.value}>
+                    {country.name}
+                  </option>
+                ))}
+              </Select>
               <Input
                 placeholder="Contact Information"
                 type="text"
