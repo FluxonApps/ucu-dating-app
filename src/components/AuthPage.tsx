@@ -175,7 +175,7 @@ const AuthPage = () => {
           {!showSignIn && (
             <>
               <Input placeholder="Age" type="number" onChange={handleAgeChange} value={age} required />
-              <Select placeholder="Gender" onChange={handleGenderChange} value={gender} required>
+              <Select placeholder="Gender" onChange={handleGenderChange} value={gender} color={'grey'} required>
                 <option value="male">Male</option>
                 <option value="female">Female</option>
                 <option value="non-binary">Non-binary</option>
@@ -194,7 +194,7 @@ const AuthPage = () => {
                 value={contactInfo}
                 required
               />
-              <Select placeholder="Preference" onChange={handlePreferenceChange} value={preference} required>
+              <Select placeholder="Preference" onChange={handlePreferenceChange} value={preference} color={'grey'} required>
                 <option value="friends">Friends</option>
                 <option value="date">Date</option>
                 <option value="dont-know">Don't know</option>
