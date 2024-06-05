@@ -21,15 +21,17 @@
 .body-cont {
   display: flex;
   flex-direction:column;
+  min-height: 100vh;
   /* justify-content: center; */
   /* height: 100%; */
   margin: 0;
-  background-color: #49B7B0;
+  background-color: #7DE1DB;;
 }
 .card-container {
   /* display: flex; */
   flex-wrap: wrap;
   justify-content: center;
+  /* margin-top: 50%; */
   /* gap: 16px; */
   /* overflow-x: auto; Horizontal scrolling */
   /* overflow-y: hidden; Hide vertical overflow */
@@ -48,7 +50,10 @@
 .connectly-logo {
     top: 0px;
     left: 0px;
-    width: 10%;
-    height: 120%;
+    width: 15%;
+    height: 130%;
     position: 'top';
   }
+.sign-out{
+  margin-top: 3%;
+}

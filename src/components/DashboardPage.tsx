@@ -1,4 +1,5 @@
-import { Box, Button, Card, Center, Spinner } from '@chakra-ui/react';
+import React, { useState } from 'react';
+import { Box, Button, Card, Center, Spinner, Select } from '@chakra-ui/react';
 import { getAuth } from 'firebase/auth';
 import { arrayUnion, collection, doc, documentId, query, updateDoc, where } from 'firebase/firestore';
 import { useAuthState, useSignOut } from 'react-firebase-hooks/auth';
@@ -14,6 +15,9 @@ const auth = getAuth();
 function DashboardPage() {
   const [user, userLoading] = useAuthState(auth);
   const [signOut] = useSignOut(auth);
+  const [ageRange, setAgeRange] = useState('');
+  const [genderFilter, setGenderFilter] = useState('');
+  const [preferenceFilter, setPreferenceFilter] = useState('');
 
   // Get the current user from Firebase
   const [currentUser, currentUserLoading] = useDocument(doc(db, 'users', user?.uid || 'asd'));
@@ -41,6 +45,35 @@ function DashboardPage() {
     return currentUserData.userLikes?.includes(userId) && userLikes.includes(currentUser.id);
   }
 
+  // Handle filter changes
+  function handleAgeRangeChange(event: React.ChangeEvent<HTMLSelectElement>) {
+    setAgeRange(event.target.value);
+  }
+
+  function handleGenderFilterChange(event: React.ChangeEvent<HTMLSelectElement>) {
+    setGenderFilter(event.target.value);
+  }
+
+  function handlePreferenceFilterChange(event: React.ChangeEvent<HTMLSelectElement>) {
+    setPreferenceFilter(event.target.value);
+  }
+
+  // Filter users by selected filters
+  const filteredUsersArray = usersArray.filter(user => {
+    const age = user.age;
+    const ageMatch = !ageRange || (
+      (ageRange === '16-18' && age >= 16 && age <= 18) ||
+      (ageRange === '19-21' && age > 18 && age <= 21) ||
+      (ageRange === '22-25' && age > 21 && age <= 25) ||
+      (ageRange === '26-30' && age > 25 && age <= 30) ||
+      (ageRange === '30+' && age > 30)
+    );
+    const genderMatch = !genderFilter || user.gender === genderFilter;
+    const preferenceMatch = !preferenceFilter || user.preference === preferenceFilter;
+
+    return ageMatch && genderMatch && preferenceMatch;
+  });
+
   // Do not show page content until auth state is fetched.
   if (userLoading || currentUserLoading || usersLoading) {
     return <Spinner />;
@@ -53,14 +86,32 @@ function DashboardPage() {
 
   return (
     <Box padding="24px" className='body-cont'>
-      {/* <p>Welcome, {currentUser?.data()?.name}!</p> */}
-      <div >
+      <div>
         <img src={logo} className="connectly-logo" />
       </div>
       <br />
-      <div className='card-container' style={{ display: 'flex', gap: '24px' }}>
+      <Select placeholder="Filter by age range" onChange={handleAgeRangeChange} value={ageRange}>
+        <option value="16-18">16-18</option>
+        <option value="19-21">19-21</option>
+        <option value="22-25">22-25</option>
+        <option value="26-30">26-30</option>
+        <option value="30+">30+</option>
+      </Select>
+      <Select placeholder="Filter by gender" onChange={handleGenderFilterChange} value={genderFilter}>
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+        <option value="non-binary">Non-binary</option>
+      </Select>
+      <Select placeholder="Filter by preference" onChange={handlePreferenceFilterChange} value={preferenceFilter}>
+        <option value="dont-know">Dont-know</option>
+        <option value="date">Date</option>
+        <option value="friends">Friends</option>
+        {/* Add other preference options as needed */}
+      </Select>
+      <br />
+      <div className='card-container' style={{ display: 'flex', gap: '24px', flexWrap: 'wrap' }}>
         {/* Display cards for each user with their data. */}
-        {usersArray.map(function (user: any) {
+        {filteredUsersArray.map(function (user: any) {
           return (
             <Card key={user.id} padding={4} className="card">
               <p>
@@ -73,7 +124,7 @@ function DashboardPage() {
                 <b>Age: </b> {user.age}
               </p>
               <p>
-                <b>Country of living: </b> {user.country}
+                <b>Country of living: </b> {user.countryOfLiving}
               </p>
               
               <p>
@@ -90,7 +141,6 @@ function DashboardPage() {
                 ''
               )}
             
-
               <Button
                 onClick={function () {
                   likeUser(user.id);
@@ -105,9 +155,11 @@ function DashboardPage() {
       </div>
 
       <br />
-      <Button onClick={signOut}>Sign out</Button>
+      <Button className='sign-out' onClick={signOut}>Sign out</Button>
     </Box>
+    // <Button onClick={signOut}>Sign out</Button>
   );
 }
 
 export default DashboardPage;
+
