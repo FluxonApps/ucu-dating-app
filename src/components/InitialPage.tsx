@@ -1,23 +1,19 @@
 import { HStack, Img, Link, Stack, Text } from '@chakra-ui/react';
 
-import fluxonLogo from '../assets/fluxon-logo.svg';
-import MainLayout from '../components/layout/MainLayout.tsx';
+import logo from '../logo.png';
+import "../components/first_page.css";
 
 function InitialPage() {
   return (
-    <MainLayout>
-      <Stack spacing={4} justifyContent="center" alignItems="center" h="full">
-        <Link target="_blank" href="https://fluxon.com">
-          <Img w={300} src={fluxonLogo} />
-        </Link>
-        <Text color="white">UCU x Fluxon Product Development Bootcamp</Text>
-        <HStack mt={4} color="blue.100">
-          <Link href="/dashboard">Go to main page</Link>
-          <Text>|</Text>
-          <Link href="/auth">Authenticate</Link>
-        </HStack>
-      </Stack>
-    </MainLayout>
+    <Stack className='container' spacing={10} justifyContent="center" alignItems="center">
+      <Img className='auth-logo' src={logo} alt='logo' />
+      <Text className='slogan'color="black" fontFamily={'Abhaya Libre'}>"Connecting Ukrainians Worldwide: Connectly brings hearts together across the globe."</Text>
+      <HStack className='link' mt={4} fontFamily={'Abril Fatface'}>
+        <Link href="/dashboard">Go to main page</Link>
+        <Text>|</Text>
+        <Link href="/auth">Authenticate</Link>
+      </HStack>
+    </Stack>
   );
 }
 

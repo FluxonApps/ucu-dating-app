@@ -14,7 +14,7 @@ import '../auth.css';
 
 import { db } from '../../firebase.config.ts';
 
-import MainLayout from './layout/MainLayout.tsx';
+
 
 const auth = getAuth();
 

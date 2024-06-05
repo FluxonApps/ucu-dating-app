@@ -1,0 +1,31 @@
+/* first_page.css */
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #7DE1DB;
+  }
+  
+  .container {
+    display: flex;
+    background-color: #7DE1DB;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .auth-logo {
+    width: 500px;
+    height: 200px;
+    margin-top: -3%;
+  }
+  
+  .slogan {
+    font-size: 25px;
+    font-family: 'Roboto', sans-serif; 
+  }
+  .link{
+    font-size: 20px;
+    color: #3C3C54;
+    font-weight: 300;
+  }
