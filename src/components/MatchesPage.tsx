@@ -1,15 +1,18 @@
-import { Box, Spinner, Text } from '@chakra-ui/react';
+import { Box, Card, Button, Spinner, Text } from '@chakra-ui/react';
 import { getAuth } from 'firebase/auth';
 import { collection, doc, documentId, query, where } from 'firebase/firestore';
-import { useAuthState } from 'react-firebase-hooks/auth';
+import { useAuthState, useSignOut } from 'react-firebase-hooks/auth';
 import { useCollection, useDocument } from 'react-firebase-hooks/firestore';
 import { Navigate } from 'react-router-dom';
 
 import { db } from '../../firebase.config';
-
+import logo from '../logo.png'
+import '../dashboard.css'
+import checkIfMatch from '../DashboardPage.tsx';
 const auth = getAuth();
 
 function MatchesPage() {
+  const [signOut] = useSignOut(auth);
   const [user, userLoading] = useAuthState(auth);
 
   // Get the current user from Firebase
@@ -34,11 +37,49 @@ function MatchesPage() {
   }
 
   return (
-    <Box padding="24px">
-      <Text fontSize="xl">Matches</Text>
-      {/* TODO Display cards of matched users. */}
+    <Box padding="24px" className='body-cont'>
+      {/* <p>Welcome, {currentUser?.data()?.name}!</p> */}
+      <div >
+        <img src={logo} className="connectly-logo" />
+      </div>
+      <br />
+      <div className='card-container' style={{ display: 'flex', gap: '24px' }}>
+        {/* Display cards for each user with their data. */}
+        {usersArray.map(function (user: any) {
+          return (
+            <Card key={user.id} padding={4} className="card">
+              <p>
+                <b>Name: </b> {user.name}
+              </p>
+              <p>
+                <b>Gender: </b> {user.gender}
+              </p>
+              <p>
+                <b>Age: </b> {user.age}
+              </p>
+              <p>
+                <b>Country of living: </b> {user.country}
+              </p>
+              
+              <p>
+                <b>Preference: </b> {user.preference}
+              </p>
+              <p>
+                <b>Comment: </b> {user.comment}
+              </p>
+              <p>
+                <b>Contact info: </b> {user.contactInfo}
+              </p>
+            </Card>
+          );
+        })}
+      </div>
+
+      <br />
+      <Button onClick={signOut}>Sign out</Button>
     </Box>
   );
-}
+};
+
 
 export default MatchesPage;
