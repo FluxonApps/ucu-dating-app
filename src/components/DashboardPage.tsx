@@ -111,51 +111,55 @@ function DashboardPage() {
       <br />
       <div className='card-container' style={{ display: 'flex', gap: '24px', flexWrap: 'wrap' }}>
         {/* Display cards for each user with their data. */}
-        {filteredUsersArray.map(function (user: any) {
-          return (
-            <Card key={user.id} padding={4} className="card">
-              <p>
-                <b>Name: </b> {user.name}
-              </p>
-              <p>
-                <b>Gender: </b> {user.gender}
-              </p>
-              <p>
-                <b>Age: </b> {user.age}
-              </p>
-              <p>
-                <b>Country of living: </b> {user.countryOfLiving}
-              </p>
-              
-              <p>
-                <b>Preference: </b> {user.preference}
-              </p>
-              <p>
-                <b>Comment: </b> {user.comment}
-              </p>
-              {checkIfMatch(user.id, user.userLikes || []) ? (
+        {filteredUsersArray.length > 0 ? (
+          filteredUsersArray.map(function (user: any) {
+            return (
+              <Card key={user.id} padding={4} className="card">
                 <p>
-                  <b>Contact info: </b> {user.contactInfo}
+                  <b>Name: </b> {user.name}
                 </p>
-              ) : (
-                ''
-              )}
-            
-              <Button
-                onClick={function () {
-                  likeUser(user.id);
-                }}
-                className="my-button"
-              >
-                ❤️
-              </Button>
-            </Card>
-          );
-        })}
+                <p>
+                  <b>Gender: </b> {user.gender}
+                </p>
+                <p>
+                  <b>Age: </b> {user.age}
+                </p>
+                <p>
+                  <b>Country of living: </b> {user.countryOfLiving}
+                </p>
+                <p>
+                  <b>Preference: </b> {user.preference}
+                </p>
+                <p>
+                  <b>Comment: </b> {user.comment}
+                </p>
+                {checkIfMatch(user.id, user.userLikes || []) ? (
+                  <p>
+                    <b>Contact info: </b> {user.contactInfo}
+                  </p>
+                ) : (
+                  ''
+                )}
+                <Button
+                  onClick={function () {
+                    likeUser(user.id);
+                  }}
+                  className="my-button"
+                >
+                  ❤️
+                </Button>
+              </Card>
+            );
+          })
+        ) : (
+          <Center w="full" py={8}>
+            <p>No users matched your filters.</p>
+          </Center>
+        )}
       </div>
 
       <br />
-      <Button className='sign-out' onClick={signOut}>Sign out</Button>
+      <Button className='' onClick={signOut}>Sign out</Button>
     </Box>
     // <Button onClick={signOut}>Sign out</Button>
   );
