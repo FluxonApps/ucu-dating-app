@@ -52,11 +52,13 @@ function DashboardPage() {
   }
 
   return (
-    <Box padding="24px">
+    <Box padding="24px" className='body-cont'>
       {/* <p>Welcome, {currentUser?.data()?.name}!</p> */}
-      <img src={logo} className="connectly-logo" />
+      <div >
+        <img src={logo} className="connectly-logo" />
+      </div>
       <br />
-      <div style={{ display: 'flex', gap: '24px' }}>
+      <div className='card-container' style={{ display: 'flex', gap: '24px' }}>
         {/* Display cards for each user with their data. */}
         {usersArray.map(function (user: any) {
           return (
@@ -65,11 +67,15 @@ function DashboardPage() {
                 <b>Name: </b> {user.name}
               </p>
               <p>
+                <b>Gender: </b> {user.gender}
+              </p>
+              <p>
                 <b>Age: </b> {user.age}
               </p>
               <p>
                 <b>Country of living: </b> {user.country}
               </p>
+              
               <p>
                 <b>Preference: </b> {user.preference}
               </p>
@@ -83,6 +89,8 @@ function DashboardPage() {
               ) : (
                 ''
               )}
+            
+
               <Button
                 onClick={function () {
                   likeUser(user.id);
