@@ -59,10 +59,16 @@
   background-color: #B571B7;
   color:white;
   height: 30px;
+  border-color:  #B571B7;
+  border-width: 1px;
+  border-radius: 100px;
 }
 .gotopage{
   margin-top: 1%;
   background-color: #B571B7;
   color:white;
   height: 30px;
+  border-color:#B571B7;
+  border-width: 1px;
+  border-radius: 100px;
 }
