@@ -3,7 +3,7 @@ import { getAuth } from 'firebase/auth';
 import { collection, doc, query, where, documentId } from 'firebase/firestore';
 import { useAuthState, useSignOut } from 'react-firebase-hooks/auth';
 import { useCollection, useDocument } from 'react-firebase-hooks/firestore';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 import { db } from '../../firebase.config';
 import logo from '../logo.png';
@@ -14,6 +14,7 @@ const auth = getAuth();
 function MatchesPage() {
   const [signOut] = useSignOut(auth);
   const [user, userLoading] = useAuthState(auth);
+  const navigate = useNavigate(); // Hook for navigation
 
   // Get the current user from Firebase
   const [currentUser, currentUserLoading] = useDocument(doc(db, 'users', user?.uid || 'asd'));
@@ -64,7 +65,8 @@ function MatchesPage() {
       </div>
 
       <br />
-      <Button onClick={signOut}>Sign out</Button>
+      <Button onClick={signOut} style={{ marginRight: '16px' }}>Sign out</Button>
+      <Button onClick={() => navigate('/dashboard')}>Back to Profile</Button>
     </Box>
   );
 }
