@@ -66,7 +66,7 @@ function MatchesPage() {
 
       <br />
       <Button onClick={signOut} style={{ marginRight: '16px' }}>Sign out</Button>
-      <Button onClick={() => navigate('/dashboard')}>Back to Profile</Button>
+      <Button onClick={() => navigate('/dashboard')}>Back to main page</Button>
     </Box>
   );
 }

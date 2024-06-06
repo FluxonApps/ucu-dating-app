@@ -4,7 +4,8 @@ import { getAuth } from 'firebase/auth';
 import { arrayUnion, collection, doc, documentId, query, updateDoc, where } from 'firebase/firestore';
 import { useAuthState, useSignOut } from 'react-firebase-hooks/auth';
 import { useCollection, useDocument } from 'react-firebase-hooks/firestore';
-import { Navigate } from 'react-router-dom';
+// import { Navigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 import '../dashboard.css';
 import { db } from '../../firebase.config';
@@ -14,6 +15,7 @@ import countries from '../components/countries.json'; // Import the JSON data
 const auth = getAuth();
 
 function DashboardPage() {
+  const navigate = useNavigate();
   const [user, userLoading] = useAuthState(auth);
   const [signOut] = useSignOut(auth);
   const [ageRange, setAgeRange] = useState('');
@@ -155,6 +157,7 @@ function DashboardPage() {
 
       <br />
       <Button onClick={signOut}>Sign out</Button>
+      <Button onClick={() => navigate('/matches')}>Check matches</Button>
     </Box>
   );
 }
