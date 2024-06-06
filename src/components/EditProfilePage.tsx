@@ -8,6 +8,8 @@ import { Navigate,useNavigate } from 'react-router-dom';
 // import { Navigate, useNavigate } from 'react-router-dom';
 import { db } from '../../firebase.config';
 import countries from '../components/countries.json';
+import logo from '../logo.png';
+import '../dashboard.css';
 
 const auth = getAuth();
 
@@ -111,7 +113,11 @@ function EditProfilePage() {
   }
 
   return (
-    <Box padding="24px">
+    <Box padding="24px" className='body-cont'>
+
+      <div>
+        <img src={logo} className="connectly-logo" alt="Connectly Logo" />
+      </div>
       <Text fontSize="xl" marginBottom="16px">
         Profile settings
       </Text>
