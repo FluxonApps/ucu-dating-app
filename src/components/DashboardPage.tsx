@@ -156,8 +156,9 @@ function DashboardPage() {
       </div>
 
       <br />
-      <Button onClick={signOut}>Sign out</Button>
-      <Button onClick={() => navigate('/matches')}>Check matches</Button>
+      <Button onClick={signOut} class ='sign-outt'>Sign out</Button>
+      <p> </p>
+      <Button onClick={() => navigate('/matches')} class = 'gotopage'>Check matches</Button>
     </Box>
   );
 }
