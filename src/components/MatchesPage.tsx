@@ -27,8 +27,10 @@ function MatchesPage() {
     ...user.data()
   })) || [];
 
-  // Filter users to show only those liked by the current user
-  const likedUsersArray = usersArray.filter(user => currentUserData.userLikes?.includes(user.id));
+  // Filter users to show only those with mutual likes
+  const mutualLikesArray = usersArray.filter(user =>
+    currentUserData.userLikes?.includes(user.id) && user.userLikes?.includes(currentUser.id)
+  );
 
   // Do not show page content until auth state is fetched.
   if (userLoading || currentUserLoading || usersLoading) {
@@ -47,8 +49,8 @@ function MatchesPage() {
       </div>
       <br />
       <div className='card-container' style={{ display: 'flex', gap: '24px' }}>
-        {/* Display cards for each liked user with their data. */}
-        {likedUsersArray.map(user => (
+        {/* Display cards for each user with mutual likes */}
+        {mutualLikesArray.map(user => (
           <Card key={user.id} padding={4} className="card">
             <p><b>Name: </b> {user.name}</p>
             <p><b>Gender: </b> {user.gender}</p>
