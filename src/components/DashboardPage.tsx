@@ -14,6 +14,8 @@ import countries from '../components/countries.json'; // Import the JSON data
 
 const auth = getAuth();
 
+
+
 function DashboardPage() {
   const navigate = useNavigate();
   const [user, userLoading] = useAuthState(auth);
@@ -143,6 +145,7 @@ function DashboardPage() {
               <Button
                 onClick={() => likeUser(user.id)}
                 className="my-button"
+
               >
                 ❤️
               </Button>
