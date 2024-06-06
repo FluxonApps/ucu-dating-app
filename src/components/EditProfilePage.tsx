@@ -122,7 +122,7 @@ function EditProfilePage() {
         Profile settings
       </Text>
       <form onSubmit={updateProfile}>
-        <Stack spacing={4}>
+        <Stack spacing={3}>
           <FormControl>
             <FormLabel>Name</FormLabel>
             <Input placeholder="Name" type="text" onChange={handleNameChange} value={name} required />
@@ -190,7 +190,7 @@ function EditProfilePage() {
             <Input placeholder="Comment" type="text" onChange={handleCommentChange} value={comment} required />
           </FormControl>
 
-          <Button type="submit">Update</Button>
+          <Button type="submit" class ='sign-outt'>Update</Button>
         </Stack>
       </form>
       <Button onClick={signOut} class ='sign-outt'>Sign out</Button>
