@@ -54,6 +54,15 @@
     height: 130%;
     position: 'top';
   }
-.sign-out{
+.sign-outt{
   margin-top: 3%;
+  background-color: #B571B7;
+  color:white;
+  height: 30px;
+}
+.gotopage{
+  margin-top: 1%;
+  background-color: #B571B7;
+  color:white;
+  height: 30px;
 }
