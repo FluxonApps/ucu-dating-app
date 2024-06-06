@@ -76,10 +76,12 @@ const AuthPage = () => {
 
   const handleGenderChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setGender(e.target.value);
+    e.target.style.color = 'black';
   };
 
   const handleCountryChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setCountry(e.target.value);
+    e.target.style.color = 'black';
   };
 
   const handleContactChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -88,6 +90,7 @@ const AuthPage = () => {
 
   const handlePreferenceChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setPreference(e.target.value);
+    e.target.style.color = 'black';
   };
 
   const handleCommentChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -179,12 +182,12 @@ const AuthPage = () => {
           {!showSignIn && (
             <>
               <Input placeholder="Age" type="number" onChange={handleAgeChange} value={age} required />
-              <Select placeholder="Gender" onChange={handleGenderChange} value={gender} color={'grey'} required>
+              <Select placeholder="Gender" onChange={handleGenderChange} value={gender} required style={{ color: gender ? 'black' : 'grey' }}>
                 <option value="male">Male</option>
                 <option value="female">Female</option>
                 <option value="non-binary">Non-binary</option>
               </Select>
-              <Select placeholder="Country of living" onChange={handleCountryChange} value={countryOfLiving} color={'grey'} required>
+              <Select placeholder="Country of living" onChange={handleCountryChange} value={countryOfLiving} required style={{ color: countryOfLiving ? 'black' : 'grey' }}>
                 {countries.map((country) => (
                   <option key={country.value} value={country.value}>
                     {country.name}
@@ -198,7 +201,7 @@ const AuthPage = () => {
                 value={contactInfo}
                 required
               />
-              <Select placeholder="Preference" onChange={handlePreferenceChange} value={preference} color={'grey'} required>
+              <Select placeholder="Preference" onChange={handlePreferenceChange} value={preference} required style={{ color: preference ? 'black' : 'grey' }}>
                 <option value="friends">Friends</option>
                 <option value="date">Date</option>
                 <option value="dont-know">Don't know</option>
