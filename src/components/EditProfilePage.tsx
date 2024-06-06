@@ -2,10 +2,10 @@ import { Box, Spinner, Input, Select, Stack, Button, useToast, Text, FormControl
 import { getAuth } from 'firebase/auth';
 import { doc, updateDoc } from 'firebase/firestore';
 import { FormEvent, ChangeEvent, useEffect, useState } from 'react';
-import { useAuthState } from 'react-firebase-hooks/auth';
+import { useAuthState, useSignOut } from 'react-firebase-hooks/auth';
 import { useDocument } from 'react-firebase-hooks/firestore';
-import { Navigate } from 'react-router-dom';
-
+import { Navigate,useNavigate } from 'react-router-dom';
+// import { Navigate, useNavigate } from 'react-router-dom';
 import { db } from '../../firebase.config';
 import countries from '../components/countries.json';
 
@@ -14,6 +14,8 @@ const auth = getAuth();
 function EditProfilePage() {
   const [user, userLoading] = useAuthState(auth);
   const toast = useToast();
+  const [signOut] = useSignOut(auth);
+  const navigate = useNavigate(); 
 
   // Get the current user from Firebase
   const [currentUser, currentUserLoading] = useDocument(doc(db, 'users', user?.uid || 'asd'));
@@ -185,6 +187,9 @@ function EditProfilePage() {
           <Button type="submit">Update</Button>
         </Stack>
       </form>
+      <Button onClick={signOut} class ='sign-outt'>Sign out</Button>
+      <Button onClick={() => navigate('/matches')} class = 'gotopage'>Check matches</Button>
+      <Button onClick={() => navigate('/dashboard')}  class ='gotopage' >Back to main page</Button>
     </Box>
   );
 }

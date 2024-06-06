@@ -4,6 +4,7 @@ import { collection, doc, query, where, documentId } from 'firebase/firestore';
 import { useAuthState, useSignOut } from 'react-firebase-hooks/auth';
 import { useCollection, useDocument } from 'react-firebase-hooks/firestore';
 import { Navigate, useNavigate } from 'react-router-dom';
+// import { useAuthState, useSignOut } from 'react-firebase-hooks/auth';
 
 import { db } from '../../firebase.config';
 import logo from '../logo.png';
@@ -67,6 +68,7 @@ function MatchesPage() {
       <br />
       <Button onClick={signOut}  class ='sign-outt'>Sign out</Button>
       <Button onClick={() => navigate('/dashboard')}  class ='gotopage' >Back to main page</Button>
+      <Button onClick={() => navigate('/edit-profile')} class = 'gotopage'>Edit your profile</Button>
     </Box>
   );
 }
