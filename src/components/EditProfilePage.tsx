@@ -195,8 +195,16 @@ function EditProfilePage() {
           </FormControl>
 
           <FormControl>
+            {/* <FormLabel>Preference</FormLabel>
+            <Select placeholder="Preference" onChange={handlePreferenceChange} value={preference} style={{ color: countryOfLiving ? 'black' : 'grey' }} required> */}
             <FormLabel>Preference</FormLabel>
-            <Select placeholder="Preference" onChange={handlePreferenceChange} value={preference} required>
+              <Select
+                placeholder="Preference"
+                onChange={handlePreferenceChange}
+                value={preference}
+                required
+                style={{ color: preference ? 'black' : 'grey' }}
+              >
               <option value="friends">Friends</option>
               <option value="date">Date</option>
               <option value="dont-know">Don't know</option>
