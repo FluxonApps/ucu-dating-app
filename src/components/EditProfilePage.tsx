@@ -1,10 +1,23 @@
-import { Box, Spinner, Input, Select, Stack, Button, useToast, Text, FormControl, FormLabel } from '@chakra-ui/react';
+import {
+  Box,
+  Spinner,
+  Input,
+  Select,
+  Stack,
+  Button,
+  useToast,
+  Text,
+  FormControl,
+  FormLabel,
+  Center,
+} from '@chakra-ui/react';
 import { getAuth } from 'firebase/auth';
 import { doc, updateDoc } from 'firebase/firestore';
 import { FormEvent, ChangeEvent, useEffect, useState } from 'react';
 import { useAuthState, useSignOut } from 'react-firebase-hooks/auth';
 import { useDocument } from 'react-firebase-hooks/firestore';
-import { Navigate,useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
+
 // import { Navigate, useNavigate } from 'react-router-dom';
 import { db } from '../../firebase.config';
 import countries from '../components/countries.json';
@@ -17,7 +30,7 @@ function EditProfilePage() {
   const [user, userLoading] = useAuthState(auth);
   const toast = useToast();
   const [signOut] = useSignOut(auth);
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   // Get the current user from Firebase
   const [currentUser, currentUserLoading] = useDocument(doc(db, 'users', user?.uid || 'asd'));
@@ -104,7 +117,13 @@ function EditProfilePage() {
 
   // Do not show page content until auth state is fetched.
   if (userLoading || currentUserLoading) {
-    return <Spinner />;
+    return (
+      <Box padding="24px" className="body-cont">
+        <Center>
+          <Spinner />
+        </Center>
+      </Box>
+    );
   }
 
   // If user isn't signed in, redirect to auth page.
@@ -113,8 +132,7 @@ function EditProfilePage() {
   }
 
   return (
-    <Box padding="24px" className='body-cont'>
-
+    <Box padding="24px" className="body-cont">
       <div>
         <img src={logo} className="connectly-logo" alt="Connectly Logo" />
       </div>
@@ -122,7 +140,7 @@ function EditProfilePage() {
         Profile settings
       </Text>
       <form onSubmit={updateProfile}>
-        <Stack spacing={3}>
+        <Stack spacing={3} bg="white" rounded="md" p={8}>
           <FormControl>
             <FormLabel>Name</FormLabel>
             <Input placeholder="Name" type="text" onChange={handleNameChange} value={name} required />
@@ -190,12 +208,20 @@ function EditProfilePage() {
             <Input placeholder="Comment" type="text" onChange={handleCommentChange} value={comment} required />
           </FormControl>
 
-          <Button type="submit" class ='sign-outt'>Update</Button>
+          <Button type="submit" class="sign-outt">
+            Update
+          </Button>
         </Stack>
       </form>
-      <Button onClick={signOut} class ='sign-outt'>Sign out</Button>
-      <Button onClick={() => navigate('/matches')} class = 'gotopage'>Check matches</Button>
-      <Button onClick={() => navigate('/dashboard')}  class ='gotopage' >Back to main page</Button>
+      <Button onClick={signOut} class="sign-outt">
+        Sign out
+      </Button>
+      <Button onClick={() => navigate('/matches')} class="gotopage">
+        Check matches
+      </Button>
+      <Button onClick={() => navigate('/dashboard')} class="gotopage">
+        Back to main page
+      </Button>
     </Box>
   );
 }

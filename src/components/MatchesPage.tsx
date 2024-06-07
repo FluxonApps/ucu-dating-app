@@ -1,4 +1,4 @@
-import { Box, Card, Button, Spinner } from '@chakra-ui/react';
+import { Box, Card, Button, Spinner, Center } from '@chakra-ui/react';
 import { getAuth } from 'firebase/auth';
 import { collection, doc, query, where, documentId } from 'firebase/firestore';
 import { useAuthState, useSignOut } from 'react-firebase-hooks/auth';
@@ -24,19 +24,24 @@ function MatchesPage() {
   // Get users from Firebase database
   const usersCollectionRef = collection(db, 'users');
   const [users, usersLoading] = useCollection(query(usersCollectionRef, where(documentId(), '!=', user?.uid || 'asd')));
-  const usersArray = users?.docs.map(user => ({
-    id: user.id,
-    ...user.data()
-  })) || [];
+  const usersArray =
+    users?.docs.map((user) => ({
+      id: user.id,
+      ...user.data(),
+    })) || [];
 
   // Filter users to show only those with mutual likes
-  const mutualLikesArray = usersArray.filter(user =>
-    currentUserData.userLikes?.includes(user.id) && user.userLikes?.includes(currentUser.id)
+  const mutualLikesArray = usersArray.filter(
+    (user) => currentUserData.userLikes?.includes(user.id) && user.userLikes?.includes(currentUser.id),
   );
 
   // Do not show page content until auth state is fetched.
   if (userLoading || currentUserLoading || usersLoading) {
-    return <Spinner />;
+    return (
+      <Box padding="24px" className="body-cont">
+        <Spinner />
+      </Box>
+    );
   }
 
   // If user isn't signed in, redirect to auth page.
@@ -45,30 +50,56 @@ function MatchesPage() {
   }
 
   return (
-    <Box padding="24px" className='body-cont'>
+    <Box padding="24px" className="body-cont">
       <div>
         <img src={logo} className="connectly-logo" alt="Connectly Logo" />
       </div>
       <br />
-      <div className='card-container' style={{ display: 'flex', gap: '24px' }}>
+      <div className="card-container" style={{ display: 'flex', gap: '24px' }}>
         {/* Display cards for each user with mutual likes */}
-        {mutualLikesArray.map(user => (
-          <Card key={user.id} padding={4} className="card">
-            <p><b>Name: </b> {user.name}</p>
-            <p><b>Gender: </b> {user.gender}</p>
-            <p><b>Age: </b> {user.age}</p>
-            <p><b>Country of living: </b> {user.country}</p>
-            <p><b>Preference: </b> {user.preference}</p>
-            <p><b>Comment: </b> {user.comment}</p>
-            <p><b>Contact info: </b> {user.contactInfo}</p>
-          </Card>
-        ))}
+        {mutualLikesArray.length > 0 ? (
+          mutualLikesArray.map((user) => (
+            <Card key={user.id} padding={4} className="card">
+              <p>
+                <b>Name: </b> {user.name}
+              </p>
+              <p>
+                <b>Gender: </b> {user.gender}
+              </p>
+              <p>
+                <b>Age: </b> {user.age}
+              </p>
+              <p>
+                <b>Country of living: </b> {user.country}
+              </p>
+              <p>
+                <b>Preference: </b> {user.preference}
+              </p>
+              <p>
+                <b>Comment: </b> {user.comment}
+              </p>
+              <p>
+                <b>Contact info: </b> {user.contactInfo}
+              </p>
+            </Card>
+          ))
+        ) : (
+          <Center w="full" py={8}>
+            <p>You don't have any matches.</p>
+          </Center>
+        )}
       </div>
 
       <br />
-      <Button onClick={signOut}  class ='sign-outt'>Sign out</Button>
-      <Button onClick={() => navigate('/dashboard')}  class ='gotopage' >Back to main page</Button>
-      <Button onClick={() => navigate('/edit-profile')} class = 'gotopage'>Edit your profile</Button>
+      <Button onClick={signOut} class="sign-outt">
+        Sign out
+      </Button>
+      <Button onClick={() => navigate('/dashboard')} class="gotopage">
+        Back to main page
+      </Button>
+      <Button onClick={() => navigate('/edit-profile')} class="gotopage">
+        Edit your profile
+      </Button>
     </Box>
   );
 }
